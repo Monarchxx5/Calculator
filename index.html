@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="addRow()">ADD ROW</button>
+    <table border="1" id="arithmeticTable">
+        <thead>
+            <tr>
+                <th>First Number (CA)</th>
+                <th>Second Number (CB)</th>
+                <th>Operator (CE)</th>
+                <th>Answer (CD)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="number" class="num1"></td>
+                <td><input type="number" class="num2"></td>
+                <td>
+                    <button onclick="performOperation(this, '+')">+</button>
+                    <button onclick="performOperation(this, '-')">-</button>
+                    <button onclick="performOperation(this, '*')">*</button>
+                    <button onclick="performOperation(this, '/')">/</button>
+                </td>
+                <td>
+                    <input class="result" readonly>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td><button onclick="sumFirstCells()">Total (CA): </button> <span id="totalCA"></span></td>
+                <td><button onclick="sumSecondCells()">Total (CB): </button> <span id="totalCB"></span></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <script>
+        function performOperation(button, operator) {
+            var table = document.getElementById("arithmeticTable");
+            var currentRow = button.parentNode.parentNode;
+            var num1 = parseFloat(currentRow.querySelector(".num1").value);
+            var num2 = parseFloat(currentRow.querySelector(".num2").value);
+            var resultCell = currentRow.querySelector(".result");
+
+            switch (operator) {
+                case '+':
+                    resultCell.value = num1 + num2;
+                    break;
+                case '-':
+                    resultCell.value = num1 - num2;
+                    break;
+                case '*':
+                    resultCell.value = num1 * num2;
+                    break;
+                case '/':
+                    if (num2 !== 0) {
+                        resultCell.value = num1 / num2;
+                    } else {
+                        resultCell.value = "Cannot divide by zero";
+                    }
+                    break;
+                default:
+                    resultCell.value = "Invalid operator";
+            }
+        }
+
+        function addRow() {
+            var table = document.getElementById("arithmeticTable");
+            var newRow = table.insertRow(table.rows.length - 1);
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+            var cell4 = newRow.insertCell(3);
+
+            cell1.innerHTML = '<input type="number" class="num1">';
+            cell2.innerHTML = '<input type="number" class="num2">';
+            cell3.innerHTML = '<button onclick="performOperation(this, \'+\')">+</button>' +
+                              '<button onclick="performOperation(this, \'-\')">-</button>' +
+                              '<button onclick="performOperation(this, \'*\')">*</button>' +
+                              '<button onclick="performOperation(this, \'/\')">/</button>';
+            cell4.innerHTML = '<input class="result" readonly>';
+        }
+
+        function calculateTotal() {
+            var table = document.getElementById("arithmeticTable");
+            var totalFirstNumber = 0;
+            var totalSecondNumber = 0;
+
+            for (var i = 1; i < table.rows.length - 1; i++) {
+                totalFirstNumber += parseFloat(table.rows[i].querySelector(".num1").value) || 0;
+                totalSecondNumber += parseFloat(table.rows[i].querySelector(".num2").value) || 0;
+            }
+
+            document.getElementById("totalCA").textContent = totalFirstNumber.toFixed(2);
+            document.getElementById("totalCB").textContent = totalSecondNumber.toFixed(2);
+        }
+
+        function sumFirstCells() {
+            // Get all input elements in the first column
+            var firstCells = document.querySelectorAll('#arithmeticTable td:first-child input');
+
+            // Calculate the sum of values in the first cells
+            var sum = 0;
+            firstCells.forEach(function (cell) {
+                sum += parseFloat(cell.value) || 0;
+            });
+
+            // Display the sum beside the Total (CA) button
+            document.getElementById('totalCA').textContent = sum.toFixed(2);
+        }
+
+        function sumSecondCells() {
+            // Get all input elements in the second column
+            var secondCells = document.querySelectorAll('#arithmeticTable td:nth-child(2) input');
+
+            // Calculate the sum of values in the second cells
+            var sum = 0;
+            secondCells.forEach(function (cell) {
+                sum += parseFloat(cell.value) || 0;
+            });
+
+            // Display the sum beside the Total (CB) button
+            document.getElementById('totalCB').textContent = sum.toFixed(2);
+        }
+    </script>
+</body>
+</html>
