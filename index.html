@@ -69,9 +69,6 @@
                 default:
                     resultCell.value = "Invalid operator";
             }
-
-            // Update total when a new value is added
-            updateTotal();
         }
 
         function addRow() {
@@ -89,9 +86,6 @@
                               '<button onclick="performOperation(this, \'*\')">*</button>' +
                               '<button onclick="performOperation(this, \'/\')">/</button>';
             cell4.innerHTML = '<input class="result" readonly>';
-
-            // Update total when a new row is added
-            calculateTotal();
         }
 
         function calculateTotal() {
